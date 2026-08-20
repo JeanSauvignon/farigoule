@@ -13,10 +13,19 @@
 
   let notes = [];
   let noteCourante = null;
+  let coffre = null;
 
   /* ---------- Déchiffrement ---------- */
 
   const b64 = (s) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0));
+
+  // 340 Ko : on ne les télécharge qu'une fois, sinon chaque essai de mot de
+  // passe repayerait l'attente. Le fichier est statique, le cache du
+  // navigateur fait le reste au retour sur le site.
+  async function chargerCoffre() {
+    if (!coffre) coffre = await (await fetch("notes.enc")).json();
+    return coffre;
+  }
 
   async function dechiffrer(coffre, motDePasse) {
     const base = await crypto.subtle.importKey(
@@ -234,15 +243,19 @@
     const erreur = $("#erreur-mdp");
     erreur.hidden = true;
     bouton.disabled = true;
-    bouton.textContent = "Ouverture…";
+    bouton.textContent = coffre ? "Ouverture…" : "Téléchargement du journal…";
     try {
-      const coffre = await (await fetch("notes.enc", { cache: "no-store" })).json();
-      notes = await dechiffrer(coffre, $("#mdp").value);
+      notes = await dechiffrer(await chargerCoffre(), $("#mdp").value);
       ouvrir();
-    } catch {
-      erreur.textContent = "Mot de passe incorrect.";
+    } catch (erreurAttrapee) {
+      // Un mot de passe faux fait échouer le déchiffrement ; tout le reste
+      // (réseau, fichier absent) mérite un message distinct.
+      erreur.textContent = coffre
+        ? "Mot de passe incorrect."
+        : "Le journal n'a pas pu être téléchargé. Vérifiez la connexion.";
       erreur.hidden = false;
       $("#mdp").select();
+      if (!coffre) console.error(erreurAttrapee);
     } finally {
       bouton.disabled = false;
       bouton.textContent = "Entrer";
