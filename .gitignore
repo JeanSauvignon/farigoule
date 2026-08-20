@@ -1,0 +1,17 @@
+# Ce dépôt est destiné à être PUBLIC (GitHub Pages). Seul docs/notes.enc,
+# chiffré, y est publié. Tout ce qui laisserait lire le journal sans le mot de
+# passe reste hors du dépôt : les photos des pages et les transcriptions en
+# clair sont donc ignorées ici.
+#
+# Pour versionner l'archive complète, utiliser un dépôt PRIVÉ séparé (ou passer
+# celui-ci en privé, ce qui demande un plan payant pour garder Pages actif).
+photo_sources/
+transcriptions/
+build/notes.json
+build/notes_brutes.json
+docs/data.js
+
+__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db

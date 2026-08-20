@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>La Farigoule — journal de la maison</title>
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><text y='13' font-size='13'>🌿</text></svg>">
+</head>
+<body>
+
+<div id="porte" class="porte">
+  <form id="form-mdp" class="carte-mdp">
+    <h1>La Farigoule</h1>
+    <p class="sous-titre">Journal de la maison &middot; Grasse</p>
+    <label for="mdp">Mot de passe</label>
+    <input type="password" id="mdp" autocomplete="current-password" autofocus>
+    <button type="submit" id="bouton-entrer">Entrer</button>
+    <p id="erreur-mdp" class="erreur" role="alert" hidden></p>
+  </form>
+</div>
+
+<div id="app" hidden>
+  <header class="entete">
+    <div class="titre-zone">
+      <h1>La Farigoule</h1>
+      <p class="sous-titre" id="resume"></p>
+    </div>
+    <div class="recherche-zone">
+      <input type="search" id="recherche" placeholder="Rechercher dans le journal…"
+             autocomplete="off" spellcheck="false">
+      <span id="compteur" class="compteur"></span>
+    </div>
+  </header>
+
+  <div class="corps">
+    <nav class="frise" id="frise" aria-label="Chronologie"></nav>
+    <main class="lecture" id="lecture"></main>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
