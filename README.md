@@ -78,6 +78,11 @@ Aucune dépendance, aucun script externe, tout tient en trois fichiers
 
 - lecture continue de 2000 à 2026, avec un repère d'année ;
 - frise latérale : les années, et le détail des notes de l'année en cours ;
-- recherche plein texte insensible aux accents et à la casse, avec surlignage
-  des occurrences (`Ctrl+F` ouvre cette recherche plutôt que celle du
-  navigateur, `Échap` l'efface).
+- recherche plein texte insensible aux accents et à la casse. Le compteur
+  affiche `rang / total · nombre de notes`, et on saute d'une occurrence à la
+  suivante avec `Entrée` (ou les flèches ‹ ›), à la précédente avec
+  `Maj+Entrée` ; l'occurrence courante se distingue des autres. `Ctrl+F` ouvre
+  cette recherche plutôt que celle du navigateur, `Échap` l'efface.
+
+Le rameau d'olivier de `docs/olivier.svg` reprend le motif peint sur les
+assiettes de la maison. Il sert aussi de favicon.

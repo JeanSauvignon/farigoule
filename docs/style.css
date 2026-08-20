@@ -24,6 +24,11 @@
 
 * { box-sizing: border-box; }
 
+/* Une règle `display` d'auteur l'emporte sur le `[hidden] { display: none }` du
+   navigateur : sans ce rappel, la porte d'entrée et la navigation entre
+   occurrences restent affichées alors qu'on les a masquées. */
+[hidden] { display: none !important; }
+
 html { scroll-behavior: smooth; }
 
 body {
@@ -56,7 +61,31 @@ h1 { font-family: var(--serif); font-weight: 600; letter-spacing: .01em; }
   text-align: center;
 }
 
-.carte-mdp h1 { margin: 0; font-size: 2rem; }
+.marque {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .9rem;
+  margin: 0;
+}
+
+.marque span {
+  font-family: var(--serif);
+  font-size: 2rem;
+  font-weight: 600;
+  letter-spacing: .01em;
+  white-space: nowrap;
+}
+
+.rameau { width: 5.5rem; flex-shrink: 1; min-width: 0; }
+.miroir { transform: scaleX(-1); }
+
+.rameau-mini {
+  width: 3.1rem;
+  vertical-align: -.15em;
+  margin-right: .15rem;
+}
+
 .carte-mdp .sous-titre { margin-bottom: 2.5rem; }
 
 .carte-mdp label {
@@ -128,7 +157,43 @@ h1 { font-family: var(--serif); font-weight: 600; letter-spacing: .01em; }
   color: inherit;
 }
 
-.compteur { font-size: .78rem; color: var(--encre-douce); white-space: nowrap; }
+.compteur {
+  font-size: .78rem;
+  color: var(--encre-douce);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.navigation-occurrences { display: flex; gap: .15rem; }
+
+.navigation-occurrences button {
+  all: unset;
+  box-sizing: border-box;
+  cursor: pointer;
+  width: 1.5rem;
+  height: 1.5rem;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--trait);
+  border-radius: 50%;
+  color: var(--encre-douce);
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.navigation-occurrences button:hover {
+  color: var(--papier);
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.navigation-occurrences button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+/* L'occurrence sur laquelle on vient de sauter, distincte des autres. */
+mark.actif {
+  background: var(--accent);
+  color: var(--papier);
+}
 
 .corps {
   display: grid;
@@ -145,8 +210,10 @@ h1 { font-family: var(--serif); font-weight: 600; letter-spacing: .01em; }
   position: sticky;
   top: 4.6rem;
   align-self: start;
+  min-width: 0;
   max-height: calc(100dvh - 6rem);
   overflow-y: auto;
+  overflow-x: hidden;
   padding: 1.6rem 0;
   font-size: .85rem;
   scrollbar-width: thin;
@@ -156,6 +223,10 @@ h1 { font-family: var(--serif); font-weight: 600; letter-spacing: .01em; }
 
 .frise-annee > button {
   all: unset;
+  /* `all: unset` remet aussi box-sizing à content-box : sans ce rappel, la
+     largeur 100% s'ajoute au padding et à la bordure, la frise déborde
+     horizontalement et le nombre de notes part hors du cadre. */
+  box-sizing: border-box;
   cursor: pointer;
   display: flex;
   justify-content: space-between;
@@ -176,18 +247,30 @@ h1 { font-family: var(--serif); font-weight: 600; letter-spacing: .01em; }
   border-left-color: var(--accent);
 }
 
-.frise-annee .nb { font-size: .7rem; color: var(--encre-douce); font-variant-numeric: tabular-nums; }
+.frise-annee .nb {
+  font-size: .7rem;
+  color: var(--encre-douce);
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+}
+
+.frise-annee > button > span:first-child { min-width: 0; }
 
 .frise-notes { display: none; padding: .1rem 0 .5rem 1.4rem; }
 .frise-annee.active .frise-notes { display: block; }
 
 .frise-notes button {
   all: unset;
+  box-sizing: border-box;
   cursor: pointer;
   display: block;
+  width: 100%;
   padding: .18rem 0;
   color: var(--encre-douce);
   font-size: .78rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .frise-notes button:hover { color: var(--accent); }
@@ -278,7 +361,11 @@ mark {
   .frise-annee.active .frise-notes { display: none; }
 
   .entete { padding: .7rem 1rem; }
-  .recherche-zone input { width: 100%; }
+  .recherche-zone input { width: 100%; flex: 1 1 auto; min-width: 0; }
   .recherche-zone { flex: 1 1 100%; }
   .jalon-annee { font-size: 2rem; margin-top: 2.5rem; }
+  .rameau { width: 3.4rem; }
+  .marque { gap: .5rem; }
+  .marque span { font-size: 1.7rem; }
+  .rameau-mini { display: none; }
 }

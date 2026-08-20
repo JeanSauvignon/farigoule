@@ -14,6 +14,9 @@
   let notes = [];
   let noteCourante = null;
   let coffre = null;
+  let occurrences = [];
+  let iOccurrence = -1;
+  let derniereRequete = null;
 
   /* ---------- Déchiffrement ---------- */
 
@@ -224,16 +227,50 @@
     }
   }
 
+  /* ---------- Saut d'une occurrence à l'autre ---------- */
+
+  function allerAOccurrence(cible) {
+    if (!occurrences.length) return;
+    // On boucle : après la dernière occurrence on repart de la première.
+    const total = occurrences.length;
+    iOccurrence = ((cible % total) + total) % total;
+    occurrences.forEach((m) => m.classList.remove("actif"));
+    const marque = occurrences[iOccurrence];
+    marque.classList.add("actif");
+    marque.scrollIntoView({ behavior: "smooth", block: "center" });
+    majCompteur();
+  }
+
+  function majCompteur() {
+    const compteur = $("#compteur");
+    const navigation = $("#navigation-occurrences");
+    if (!occurrences.length) {
+      compteur.textContent = champRecherche.value.trim() ? "aucune occurrence" : "";
+      navigation.hidden = true;
+      return;
+    }
+    const rang = iOccurrence < 0 ? "–" : iOccurrence + 1;
+    const notesTrouvees = new Set(
+      occurrences.map((m) => m.closest(".note").dataset.id)).size;
+    compteur.textContent =
+      `${rang} / ${occurrences.length} · ${notesTrouvees} note${notesTrouvees > 1 ? "s" : ""}`;
+    navigation.hidden = false;
+  }
+
   function rafraichir() {
+    derniereRequete = champRecherche.value;
     const termes = termesDe(champRecherche.value);
     const visibles = filtrer(termes);
     noteCourante = null;
     construireFrise(visibles);
     afficherNotes(visibles, termes);
-    $("#compteur").textContent = termes.length
-      ? `${visibles.length} note${visibles.length > 1 ? "s" : ""}`
-      : "";
+    occurrences = [...lecture.querySelectorAll("mark")];
+    iOccurrence = -1;
+    majCompteur();
   }
+
+  $("#occ-suivante").addEventListener("click", () => allerAOccurrence(iOccurrence + 1));
+  $("#occ-precedente").addEventListener("click", () => allerAOccurrence(iOccurrence - 1));
 
   /* ---------- Entrée dans le site ---------- */
 
@@ -278,6 +315,22 @@
     clearTimeout(minuteur);
     minuteur = setTimeout(rafraichir, 120);
   });
+
+  // Entrée passe à l'occurrence suivante, Maj+Entrée à la précédente.
+  champRecherche.addEventListener("keydown", (e) => {
+    if (e.key !== "Enter") return;
+    e.preventDefault();
+    clearTimeout(minuteur);
+    rafraichirSiBesoin();
+    allerAOccurrence(e.shiftKey ? iOccurrence - 1 : iOccurrence + 1);
+  });
+
+  // La frappe la plus récente n'a peut-être pas encore été prise en compte :
+  // on n'appelle rafraichir() que dans ce cas, sinon le saut repartirait de la
+  // première occurrence à chaque Entrée.
+  function rafraichirSiBesoin() {
+    if (champRecherche.value !== derniereRequete) rafraichir();
+  }
 
   // Ctrl+F cherche dans le journal plutôt que dans la page rendue.
   document.addEventListener("keydown", (e) => {
