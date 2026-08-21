@@ -1,4 +1,4 @@
-/* La Farigoule — lecture du journal.
+/* La Farigoule, lecture du journal.
    Les notes arrivent chiffrées ; rien n'est lisible sans le mot de passe. */
 
 (() => {
@@ -249,7 +249,7 @@
       navigation.hidden = true;
       return;
     }
-    const rang = iOccurrence < 0 ? "–" : iOccurrence + 1;
+    const rang = iOccurrence < 0 ? "-" : iOccurrence + 1;
     const notesTrouvees = new Set(
       occurrences.map((m) => m.closest(".note").dataset.id)).size;
     compteur.textContent =
@@ -305,7 +305,7 @@
     const premiere = notes[0].date.slice(0, 4);
     const derniere = notes[notes.length - 1].date.slice(0, 4);
     $("#resume").textContent =
-      `${notes.length} notes · ${premiere}–${derniere}`;
+      `${notes.length} notes · ${premiere}-${derniere}`;
     rafraichir();
     champRecherche.focus();
   }

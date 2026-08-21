@@ -8,6 +8,8 @@
 photo_sources/
 transcriptions/
 build/notes.json
+*.docx
+build/docx/
 build/notes_brutes.json
 docs/data.js
 

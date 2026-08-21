@@ -36,9 +36,16 @@ def decouper_en_notes(pages):
     notes = []
     courante = None
     for page in pages:
+        # Une phrase coupée par le tournage de page se retrouve dans deux
+        # paragraphes : on note d'où vient chaque ligne pour pouvoir les
+        # recoller sans risquer de souder deux phrases d'une même page.
+        cote = "?"
         for ligne in page["corps"].splitlines():
             nu = ligne.strip()
-            if not nu or nu.startswith("## ") or nu.startswith("*(suite"):
+            if nu.startswith("## "):
+                cote = nu[3:].strip()
+                continue
+            if not nu or nu.startswith("*(suite"):
                 continue
             if nu == "*(page vierge)*" or nu.startswith("*(page vierge,"):
                 continue
@@ -51,18 +58,21 @@ def decouper_en_notes(pages):
                     "annotation": reste,
                     "photos": [],
                     "lignes": [],
+                    "origines": [],
                 }
                 notes.append(courante)
                 # Un titre suivi d'un simple rappel d'année en italique n'a pas
                 # de corps sur cette ligne ; tout autre texte en fait partie.
                 if reste and not re.fullmatch(r"\*\(.*\)\*", reste):
                     courante["lignes"].append(reste)
+                    courante["origines"].append(page["photo"] + " " + cote)
             elif nu.startswith("*(séjour non daté"):
                 courante = {
                     "titre_manuscrit": "(séjour non daté)",
                     "annotation": nu,
                     "photos": [],
                     "lignes": [],
+                    "origines": [],
                 }
                 notes.append(courante)
                 continue
@@ -73,6 +83,7 @@ def decouper_en_notes(pages):
                 pass  # le titre lui-même ne va pas dans le corps
             else:
                 courante["lignes"].append(nu)
+                courante["origines"].append(page["photo"] + " " + cote)
             if page["photo"] not in courante["photos"]:
                 courante["photos"].append(page["photo"])
     return notes

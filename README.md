@@ -19,12 +19,12 @@ novembre 2000 à juin 2026, et petit site pour le relire.
 Chaque fichier de `transcriptions/` correspond à une photo et respecte la mise
 en page du cahier : `## Page gauche`, `## Page droite`. Les conventions :
 
-- `**Mardi 2 Avril**` — un titre de note tel qu'il est écrit ;
-- `*(2002)*` — l'année rétablie quand elle n'est pas dans le manuscrit ;
-- `*(suite du …)*` — la page continue la note commencée plus tôt ;
-- `~~Vendredi 25 Octobre~~ Lundi 4 Novembre` — une rature de l'autrice ;
-- `**X**` — le repère qu'elle utilise pour signaler un événement extérieur ;
-- `*(annotation marginale : …)*` — un ajout dans la marge.
+- `**Mardi 2 Avril**` : un titre de note tel qu'il est écrit ;
+- `*(2002)*` : l'année rétablie quand elle n'est pas dans le manuscrit ;
+- `*(suite du ...)*` : la page continue la note commencée plus tôt ;
+- `~~Vendredi 25 Octobre~~ Lundi 4 Novembre` : une rature de l'autrice ;
+- `**X**` : le repère qu'elle utilise pour signaler un événement extérieur ;
+- `*(annotation marginale : ...)*` : un ajout dans la marge.
 
 L'ordre des photos a été vérifié sur les métadonnées EXIF (prises en série, à
 quelques secondes d'intervalle). Il est essentiel : de nombreuses notes ne
@@ -62,7 +62,7 @@ une phrase de passe de plusieurs mots.
 **Ce que le dépôt public ne contient pas.** Les photos des pages et les
 transcriptions en clair rendraient le mot de passe inutile si elles étaient
 publiées : `.gitignore` les exclut. Elles existent en local dans
-`photo_sources/` et `transcriptions/` et sont à sauvegarder ailleurs — un
+`photo_sources/` et `transcriptions/` et sont à sauvegarder ailleurs : un
 dépôt privé séparé, ou un disque de sauvegarde. Pour tout versionner au même
 endroit, il faut un dépôt privé, et GitHub Pages y demande alors un plan payant.
 
